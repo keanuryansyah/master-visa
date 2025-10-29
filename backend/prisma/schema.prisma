@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Country {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  description String?
+  packages    Package[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Package {
+  id          Int      @id @default(autoincrement())
+  countryId   Int
+  country     Country  @relation(fields: [countryId], references: [id])
+  title       String
+  description String
+  weServe     Json
+  price1      Int
+  price2      Int
+  price3_6    Int
+  price7plus  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  bookings Booking[] // ✅ relasi balik ke Booking
+}
+
+model Booking {
+  id              Int      @id @default(autoincrement())
+  packageId       Int
+  package         Package  @relation(fields: [packageId], references: [id])
+  name            String
+  email           String
+  phone           String
+  peopleCount     Int
+  totalAmount     Int
+  paymentStatus   String   @default("pending")
+  midtransOrderId String?
+  createdAt       DateTime @default(now())
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
