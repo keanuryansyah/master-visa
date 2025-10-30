@@ -31,7 +31,7 @@ model Package {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  bookings Booking[] // ✅ relasi balik ke Booking
+  bookings Booking[]
 }
 
 model Booking {
